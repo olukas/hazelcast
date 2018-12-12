@@ -243,11 +243,13 @@ public final class GroupProperty {
     public static final HazelcastProperty CONNECT_ALL_WAIT_SECONDS
             = new HazelcastProperty("hazelcast.connect.all.wait.seconds", 120, SECONDS);
 
+    @Deprecated
     public static final HazelcastProperty MEMCACHE_ENABLED
             = new HazelcastProperty("hazelcast.memcache.enabled", false);
+    @Deprecated
     public static final HazelcastProperty REST_ENABLED
             = new HazelcastProperty("hazelcast.rest.enabled", false);
-
+    @Deprecated
     public static final HazelcastProperty HTTP_HEALTHCHECK_ENABLED
             = new HazelcastProperty("hazelcast.http.healthcheck.enabled", false);
 
