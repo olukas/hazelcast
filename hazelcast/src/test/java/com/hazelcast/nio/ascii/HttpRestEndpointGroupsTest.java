@@ -16,14 +16,6 @@
 
 package com.hazelcast.nio.ascii;
 
-import static com.hazelcast.config.RestEndpointGroup.CLUSTER_READ;
-import static com.hazelcast.config.RestEndpointGroup.CLUSTER_WRITE;
-import static com.hazelcast.config.RestEndpointGroup.DATA;
-import static com.hazelcast.config.RestEndpointGroup.HEALTH_CHECK;
-import static com.hazelcast.config.RestEndpointGroup.HOT_RESTART;
-import static com.hazelcast.config.RestEndpointGroup.MEMCACHE;
-import static com.hazelcast.config.RestEndpointGroup.WAN;
-
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
@@ -34,7 +26,6 @@ import org.junit.runners.Parameterized.UseParametersRunnerFactory;
 
 import com.hazelcast.config.RestEndpointGroup;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.internal.cluster.Versions;
 import com.hazelcast.test.HazelcastParallelParametersRunnerFactory;
 import com.hazelcast.test.annotation.QuickTest;
 
@@ -44,52 +35,7 @@ import com.hazelcast.test.annotation.QuickTest;
 @RunWith(Parameterized.class)
 @UseParametersRunnerFactory(HazelcastParallelParametersRunnerFactory.class)
 @Category(QuickTest.class)
-public class HttpRestEndpointGroupsTest extends AbstractProtocolsFilterTestBase {
-
-    private static final TestUrl[] TEST_URLS = new TestUrl[] {
-            new TestUrl(CLUSTER_WRITE, POST, "/hazelcast/rest/mancenter/changeurl ", "HTTP/1.1 500"),
-            new TestUrl(CLUSTER_WRITE, POST, "/hazelcast/rest/mancenter/security/permissions", "forbidden"),
-            new TestUrl(CLUSTER_READ, GET, "/hazelcast/rest/cluster", "Members {size:1, ver:1} ["),
-            new TestUrl(CLUSTER_READ, POST, "/hazelcast/rest/management/cluster/state", "fail"),
-            new TestUrl(CLUSTER_WRITE, POST, "/hazelcast/rest/management/cluster/changeState", "HTTP/1.1 500"),
-            new TestUrl(CLUSTER_WRITE, POST, "/hazelcast/rest/management/cluster/version", "HTTP/1.1 500"),
-            new TestUrl(CLUSTER_READ, GET, "/hazelcast/rest/management/cluster/version", Versions.CURRENT_CLUSTER_VERSION.toString()),
-            new TestUrl(CLUSTER_WRITE, POST, "/hazelcast/rest/management/cluster/clusterShutdown", "fail"),
-            new TestUrl(CLUSTER_WRITE, POST, "/hazelcast/rest/management/cluster/memberShutdown", "fail"),
-            new TestUrl(CLUSTER_READ, POST, "/hazelcast/rest/management/cluster/nodes", "fail"),
-            new TestUrl(HOT_RESTART, POST, "/hazelcast/rest/management/cluster/forceStart", "fail"),
-            new TestUrl(HOT_RESTART, POST, "/hazelcast/rest/management/cluster/partialStart", "fail"),
-            new TestUrl(HOT_RESTART, POST, "/hazelcast/rest/management/cluster/hotBackup", "fail"),
-            new TestUrl(HOT_RESTART, POST, "/hazelcast/rest/management/cluster/hotBackupInterrupt", "fail"),
-            new TestUrl(WAN, POST, "/hazelcast/rest/mancenter/wan/sync/map", "HTTP/1.1 500"),
-            new TestUrl(WAN, POST, "/hazelcast/rest/mancenter/wan/sync/allmaps", "HTTP/1.1 500"),
-            new TestUrl(WAN, POST, "/hazelcast/rest/mancenter/wan/clearWanQueues", "HTTP/1.1 500"),
-            new TestUrl(WAN, POST, "/hazelcast/rest/mancenter/wan/addWanConfig", "HTTP/1.1 500"),
-            new TestUrl(WAN, POST, "/hazelcast/rest/mancenter/wan/pausePublisher", "HTTP/1.1 500"),
-            new TestUrl(WAN, POST, "/hazelcast/rest/mancenter/wan/stopPublisher", "HTTP/1.1 500"),
-            new TestUrl(WAN, POST, "/hazelcast/rest/mancenter/wan/resumePublisher", "HTTP/1.1 500"),
-            new TestUrl(WAN, POST, "/hazelcast/rest/mancenter/wan/consistencyCheck/map", "HTTP/1.1 500"),
-            new TestUrl(WAN, POST, "/hazelcast/rest/wan/sync/map", "HTTP/1.1 500"),
-            new TestUrl(WAN, POST, "/hazelcast/rest/wan/sync/allmaps", "HTTP/1.1 500"),
-            new TestUrl(WAN, POST, "/hazelcast/rest/mancenter/clearWanQueues", "HTTP/1.1 500"),
-            new TestUrl(WAN, POST, "/hazelcast/rest/wan/addWanConfig", "HTTP/1.1 500"),
-            new TestUrl(HEALTH_CHECK, GET, "/hazelcast/health/node-state", "ACTIVE"),
-            new TestUrl(HEALTH_CHECK, GET, "/hazelcast/health/cluster-state", "ACTIVE"),
-            new TestUrl(HEALTH_CHECK, GET, "/hazelcast/health/cluster-safe", "HTTP/1.1 200"),
-            new TestUrl(HEALTH_CHECK, GET, "/hazelcast/health/migration-queue-size", "HTTP/1.1 200"),
-            new TestUrl(HEALTH_CHECK, GET, "/hazelcast/health/cluster-size", "HTTP/1.1 200"),
-            new TestUrl(DATA, POST, "/hazelcast/rest/maps/", "HTTP/1.1 400"),
-            new TestUrl(DATA, GET, "/hazelcast/rest/maps/", "HTTP/1.1 400"),
-            new TestUrl(DATA, DELETE, "/hazelcast/rest/maps/", "HTTP/1.1 200"),
-            new TestUrl(DATA, POST, "/hazelcast/rest/queues/", "HTTP/1.1 400"),
-            new TestUrl(DATA, GET, "/hazelcast/rest/queues/", "HTTP/1.1 400"),
-            new TestUrl(DATA, DELETE, "/hazelcast/rest/queues/", "HTTP/1.1 400"),
-            new TestUrl(CLUSTER_WRITE, POST, "/hazelcast/1", "HTTP/1.1 404"),
-            new TestUrl(CLUSTER_WRITE, GET, "/hazelcast/1", "HTTP/1.1 404"),
-            new TestUrl(CLUSTER_WRITE, DELETE, "/hazelcast/1", "HTTP/1.1 404"),
-            // Following URL doesn't represent an HTTP request, but a memcached text protocol command
-            new TestUrl(MEMCACHE, "version", "foo", "VERSION Hazelcast"),
-    };
+public class HttpRestEndpointGroupsTest extends AbstractRestApiConfigTestBase {
 
     @Parameter
     public RestEndpointGroup restEndpointGroup;
