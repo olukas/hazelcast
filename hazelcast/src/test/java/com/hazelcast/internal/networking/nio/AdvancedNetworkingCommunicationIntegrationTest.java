@@ -69,6 +69,7 @@ public class AdvancedNetworkingCommunicationIntegrationTest extends AbstractAdva
         testRestCallFailsOnPort(hz, MEMBER_PORT);
         testRestCallFailsOnPort(hz, CLIENT_PORT);
         testRestCallFailsOnPort(hz, WAN1_PORT);
+        testRestCallFailsOnPort(hz, MEMCACHE_PORT);
     }
 
     @Test
@@ -91,6 +92,7 @@ public class AdvancedNetworkingCommunicationIntegrationTest extends AbstractAdva
         testMemcacheCallFailsOnPort(hz, MEMBER_PORT);
         testMemcacheCallFailsOnPort(hz, CLIENT_PORT);
         testMemcacheCallFailsOnPort(hz, WAN1_PORT);
+        testMemcacheCallFailsOnPort(hz, REST_PORT);
     }
 
     private void startMemberAndTryToJoinToPort(int port, int expectedClusterSize) {
