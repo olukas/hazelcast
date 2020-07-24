@@ -261,6 +261,7 @@
                     <useFile>false</useFile>
                     <trimStackTrace>false</trimStackTrace>
                     <runOrder>failedfirst</runOrder>
+                    <forkedProcessExitTimeoutInSeconds>22000</forkedProcessExitTimeoutInSeconds>
 
                     <!-- 1C means 1 process per cpu core -->
                     <!-- forkCount>1C</forkCount>
@@ -293,7 +294,7 @@
                 </configuration>
             </plugin>
 
-            <plugin>
+            <!--<plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <version>${maven.failsafe.plugin.version}</version>
@@ -323,7 +324,7 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin>-->
             <plugin>
                 <artifactId>maven-enforcer-plugin</artifactId>
                 <version>${maven.enforcer.plugin.version}</version>
@@ -657,6 +658,7 @@
                             <useFile>false</useFile>
                             <trimStackTrace>false</trimStackTrace>
                             <testFailureIgnore>true</testFailureIgnore>
+                            <forkedProcessExitTimeoutInSeconds>22000</forkedProcessExitTimeoutInSeconds>
                             <includes>
                                 <include>**/*.java</include>
                             </includes>
@@ -673,7 +675,7 @@
                         </configuration>
                     </plugin>
 
-                    <plugin>
+                    <!--<plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-failsafe-plugin</artifactId>
                         <version>${maven.failsafe.plugin.version}</version>
@@ -705,7 +707,7 @@
                                 </goals>
                             </execution>
                         </executions>
-                    </plugin>
+                    </plugin>-->
 
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
