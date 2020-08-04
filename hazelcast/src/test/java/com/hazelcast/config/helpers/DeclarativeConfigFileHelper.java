@@ -17,6 +17,7 @@
 package com.hazelcast.config.helpers;
 
 import com.hazelcast.config.Config;
+import com.hazelcast.test.HazelcastTestSupport;
 
 import java.io.File;
 import java.io.IOException;
@@ -178,9 +179,10 @@ public class DeclarativeConfigFileHelper {
 
     public File givenConfigFileInWorkDir(String filename, String content) throws IOException {
         File file = new File(filename);
-        PrintWriter writer = new PrintWriter(file, "UTF-8");
-        writer.print(content);
-        writer.close();
+        try (PrintWriter writer = new PrintWriter(file, "UTF-8")) {
+            writer.print(content);
+        }
+        HazelcastTestSupport.sleepMillis(1000);
 
         testConfigPaths.add(file.getAbsolutePath());
 
@@ -267,10 +269,27 @@ public class DeclarativeConfigFileHelper {
 
     public void ensureTestConfigDeleted() {
         if (!testConfigPaths.isEmpty()) {
+            System.out.println("testConfigPaths has size " + testConfigPaths.size());
             for (String testConfigPath : testConfigPaths) {
-                File file = new File(testConfigPath);
-                file.delete();
+                System.out.println("Trying to delete: " + testConfigPath);
+                deleteFileRepeatadly(testConfigPath);
             }
+        } else {
+            System.out.println("No testConfigPaths was found");
         }
+    }
+
+    private void deleteFileRepeatadly(String testConfigPath) {
+        File file = new File(testConfigPath);
+        for (int i = 0; i < 50; i++) {
+            file.delete();
+            if (!file.exists()) {
+                System.out.println("Exists? " + file.exists());
+                return;
+            }
+            System.out.println("Exists? " + file.exists());
+            HazelcastTestSupport.sleepMillis(200);
+        }
+        throw new RuntimeException("File " + testConfigPath + " was not be deleted.");
     }
 }
